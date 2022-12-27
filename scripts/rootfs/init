@@ -1,0 +1,64 @@
+#!/bin/sh
+
+echo "INIT SCRIPT"
+
+export PS1="\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+
+[ -d /dev ] || mkdir -m 0755 /dev
+[ -d /etc ] || mkdir /etc
+[ -d /proc ] || mkdir /proc
+[ -d /run ] || mkdir /run
+[ -d /sys ] || mkdir /sys
+[ -d /tmp ] || mkdir /tmp
+
+echo "root:x:0:0:root:/root:/bin/sh" >/etc/passwd
+echo "pwn:x:1000:1000:pwn:/home/pwn:/bin/sh" >>/etc/passwd
+echo "root:x:0:" >/etc/group
+echo "pwn:x:1000:" >>/etc/group
+
+chmod 644 /etc/passwd
+chmod 644 /etc/group
+
+chown -R root:root /
+chmod 700 -R /root
+chown pwn:pwn /home/pwn
+chmod 755 /home/pwn
+chmod 755 /dev
+
+mount -t proc -o nodev,noexec,nosuid proc /proc
+mount -t sysfs -o nodev,noexec,nosuid sysfs /sys
+mount -t devtmpfs -o nosuid,mode=0755 udev /dev
+mount -t debugfs none /sys/kernel/debug
+mount -t tmpfs none /tmp
+
+# mkdir -p /dev/pts
+# mkdir -p /var/lock
+# mount -t devpts -o noexec,nosuid,gid=5,mode=0620 devpts /dev/pts || true
+
+mdev -s # We need this to find /dev/sda later
+
+# ln -sf /proc/mounts /etc/mtab
+
+# cat /proc/kallsyms >/tmp/kallsyms
+# echo 1 >/proc/sys/kernel/kptr_restrict
+# echo 1 >/proc/sys/kernel/dmesg_restrict
+# echo 1 >/proc/sys/kernel/perf_event_paranoid
+
+# insmod /driver.ko
+# chmod 666 /dev/ptmx
+# chmod 666 /dev/driver
+
+# ifconfig lo up
+# ifconfig eth0 up
+# ifconfig eth0 10.10.10.1 netmask 255.255.255.0
+
+cd /home/pwn
+hostname linux
+setsid cttyhack setuidgid 1000 sh
+
+umount /proc
+umount /sys
+
+poweroff -d 1 -n -f
+
+echo "Boot took $(cut -d' ' -f1 /proc/uptime) seconds"

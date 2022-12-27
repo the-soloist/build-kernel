@@ -1,0 +1,20 @@
+{
+  "kernel_config": [
+    {
+      "name": "CVE-2021-22555",
+      "version": ["5.11.14"],
+      "options": [
+        "CONFIG_IP_NF_*=y",
+        "CONFIG_NETFILTER_*=y",
+        "CONFIG_USER_NS=y",
+        "CONFIG_NET_NS=y",
+        "CONFIG_COMPAT=y",
+        "CONFIG_E1000=y",
+        "CONFIG_E1000E=y",
+        "CONFIG_CHECKPOINT_RESTORE=y",
+        "CONFIG_SECURITY=n"
+      ],
+      "debug": true
+    }
+  ]
+}
