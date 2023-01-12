@@ -1,22 +1,8 @@
-/*
-musl-gcc -static vmmap.c -O3 -s -o vmmap
-
-# /vmmap /sys/module/test/sections
- 0xffffffffc00fd000 -s .note.Linux 0xffffffffc00fe138 -s .strtab 0xffffffffc01026a8 -s __mcount_loc 0xffffffffc00fe024
--s .bss 0xffffffffc00ff480 -s .gnu.linkonce.this_module 0xffffffffc00ff140 -s .symtab 0xffffffffc0102000 -s
-.note.gnu.build-id 0xffffffffc00fe000 -s .data 0xffffffffc00ff000 -s __bug_table 0xffffffffc00ff100 -s .rodata.str1.1
-0xffffffffc00fe05c -s .rodata.str1.8 0xffffffffc00fe110
-
-gdb_kernel.sh
-#!/bin/sh
-gdb -q \
--ex "file ./vmlinux" \
--ex "add-symbol-file ./test.ko 0xffffffffc00fd000 -s .note.Linux 0xffffffffc00fe138 -s .strtab 0xffffffffc01026a8 -s
-__mcount_loc 0xffffffffc00fe024 -s .bss 0xffffffffc00ff480 -s .gnu.linkonce.this_module 0xffffffffc00ff140 -s .symtab
-0xffffffffc0102000 -s .note.gnu.build-id 0xffffffffc00fe000 -s .data 0xffffffffc00ff000 -s __bug_table
-0xffffffffc00ff100 -s .rodata.str1.1 0xffffffffc00fe05c -s .rodata.str1.8 0xffffffffc00fe110" \ -ex "target remote
-localhost:1000"
-*/
+/**
+ * http://blog.eonew.cn/archives/1162
+ *
+ * musl-gcc -static vmmap.c -O3 -s -o vmmap
+ */
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>

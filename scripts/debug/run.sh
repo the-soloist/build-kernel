@@ -21,6 +21,6 @@ kill -9 $(pgrep qemu-system)
 kill -9 $(pgrep gdb)
 
 # make
-tmux send-keys -t 1 "./start.sh" Enter
+tmux send-keys -t 1 "bash ./start.sh" Enter
 # pause
-tmux send-keys -t 2 "./debug.sh" Enter
+tmux send-keys -t 2 "bash ./debug.sh" Enter

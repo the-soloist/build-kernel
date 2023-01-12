@@ -96,6 +96,10 @@ class KernelCompiler(object):
                 for opt in conf["options"]:
                     k, v = opt.split("=")
                     self.edit_option(k, v)
+
+                if conf["name"]["debug"] == True:
+                    self.add_debug_options()
+
                 return True
 
         log.error(f"{self.json_config} is not in build.json")
