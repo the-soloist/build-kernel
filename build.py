@@ -13,12 +13,16 @@ args = parser.parse_args()
 
 def main():
     global PROXISE
-    # print(args)
 
     if args.use_proxies:
+        proxy = f"{CONFIG['proxy']['type']}://"
+        if CONFIG["proxy"]["username"]:
+            proxy += f"{CONFIG['proxy']['username']}:{CONFIG['proxy']['password']}@"
+        proxy += f"{CONFIG['proxy']['host']}:{CONFIG['proxy']['port']}"
+
         PROXISE = {
-            "http": f"http://{CONFIG['proxy']['host']}:{CONFIG['proxy']['port']}",
-            "https": f"http://{CONFIG['proxy']['host']}:{CONFIG['proxy']['port']}"
+            "http": proxy,
+            "https": proxy
         }
         log.info(f"using proxies: {str(PROXISE)}")
 
