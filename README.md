@@ -1,5 +1,7 @@
 # build kernel
 
+编译 Linux Kernel 的小工具
+
 ## usage
 
 ```
@@ -26,11 +28,13 @@ options:
 ```sh
 # 下载 kernel 源码
 python build.py -kv 5.17.11 -d
-# 使用16个线程，默认配置，编译 kernel
+# 使用代理下载 kernel 源码
+python build.py -P -kv 5.17.11 -d
+# 使用16个线程，内置编译选项，编译 kernel
 python build.py -kv 5.17.11 kc -s -t 16
-# 使用代理下载 busybox
-python build.py -P -bv 1.35.0 -d
-# 使用默认配置编译 busybox
+# 下载 busybox 源码
+python build.py -bv 1.35.0 -d
+# 使用内置编译选项编译 busybox
 python build.py -bv 1.35.0 rc -s
 # 打包 busybox 文件系统位 cpio
 python build.py -bv 1.35.0 -pr
