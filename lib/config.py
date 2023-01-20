@@ -28,18 +28,18 @@ def init_parser() -> argparse.ArgumentParser:
 
     # kernel compiler
     kc_parser = subparsers.add_parser("kc", help="kernel compiler config")
-    kc_parser.add_argument("-t", "--thread-number", action="store", type=int, default=4, help="set compiler's thread number (default: 4)")
-    kc_parser.add_argument("-d", "--add-debug-symbol", action="store_true")
-    kc_parser.add_argument("-s", "--set-default-options", action="store_true")
+    kc_parser.add_argument("-t", "--thread-number", action="store", type=int, default=4, help="sets the number of compilation threads (default: 4)")
+    kc_parser.add_argument("-d", "--add-debug-symbol", action="store_true", help="add debugging options")
+    kc_parser.add_argument("-s", "--set-default-options", action="store_true", help="set built-in default options")
     kc_group = kc_parser.add_mutually_exclusive_group(required=False)
-    kc_group.add_argument("-c", "--custom-config-path", action="store")
-    kc_group.add_argument("-i", "--ini-config", action="store")
-    kc_group.add_argument("-j", "--json-config", action="store")
+    kc_group.add_argument("-c", "--custom-config-path", action="store", help="use custom config path")
+    kc_group.add_argument("-i", "--ini-config", action="store", help="use the configuration in JSON")
+    kc_group.add_argument("-j", "--json-config", action="store", help="use the configuration in INI")
 
     # rootfs compiler
     rc_parser = subparsers.add_parser("rc", help="rootfs compiler config")
-    rc_parser.add_argument("-t", "--thread-number", action="store", type=int, default=4, help="set compiler's thread number (default: 4)")
-    rc_parser.add_argument("-s", "--set-default-options", action="store_true")
+    rc_parser.add_argument("-t", "--thread-number", action="store", type=int, default=4, help="sets the number of compilation threads (default: 4)")
+    rc_parser.add_argument("-s", "--set-default-options", action="store_true", help="set built-in default options")
 
     return parser
 

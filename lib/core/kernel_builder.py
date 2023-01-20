@@ -50,7 +50,7 @@ class KernelBuilder(object):
             self.kernel_name = f"linux-{self.git_tag}"
         else:
             log.error("kernel_name init failed!")
-            exit(-1)
+            exit(1)
 
         self.src_path = KERNEL_SOUECE / self.kernel_name
         self.image_path = KERNEL_IMAGES / self.kernel_name
@@ -76,7 +76,7 @@ class KernelBuilder(object):
 
         else:
             log.error("not found kernel download method.")
-            exit(-1)
+            exit(1)
 
         return self.kernel_name
 

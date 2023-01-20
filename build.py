@@ -24,6 +24,7 @@ def main():
             "http": proxy,
             "https": proxy
         }
+
         log.info(f"using proxies: {str(PROXISE)}")
 
     if not args.busybox_version:
