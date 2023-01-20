@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import json
 from argparse import ArgumentParser
 
 from lib.config import CONFIG, BUILD_JSON_CONF
@@ -93,17 +94,64 @@ class KernelCompiler(object):
 
         for conf in json_conf["kernel_config"]:
             if self.json_config == conf["name"]:
+                # check compile version
+                if not self.check_version_expression(conf["version"]):
+                    log.error("version check error")
+                    exit(1)
+
+                # set options
                 for opt in conf["options"]:
                     k, v = opt.split("=")
                     self.edit_option(k, v)
 
-                if conf["name"]["debug"] == True:
+                # set debug options
+                if conf["debug"] == True:
                     self.add_debug_options()
 
                 return True
 
         log.error(f"{self.json_config} is not in build.json")
-        exit(-1)
+        exit(1)
+
+    def check_version_expression(self, version_dict: dict):
+        if self.builder.kernel_version:
+            key = "kernel_version"
+        elif self.builder.git_commit:
+            key = "git_commit"
+        elif self.builder.git_tag:
+            key = "git_tag"
+
+        vlist = version_dict.get(key)
+        build_version = getattr(self.builder, key)
+        log.debug(f"compare: {build_version} in {vlist}")
+
+        # when `vlist` is empty, it means that the version is unlimited
+        if not vlist:
+            return True
+
+        # parse arithmetic expressions
+        for v in vlist:
+            if v.startswith(">"):
+                if build_version > v[1:]:
+                    return True
+            elif v.startswith(">="):
+                if build_version >= v[2:]:
+                    return True
+            elif v.startswith("<"):
+                if build_version < v[1:]:
+                    return True
+            elif v.startswith("<="):
+                if build_version <= v[2:]:
+                    return True
+            elif "~" in v:
+                _a1, _a2 = v.split("~")
+                if _a1 <= build_version <= _a2:
+                    return True
+            else:
+                if build_version == v:
+                    return True
+
+        return False
 
     def parse_compile_options(self):
         self.new_dot_config = parse_compile_options(self.dot_config, self.compile_options)

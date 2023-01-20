@@ -2,7 +2,11 @@
   "kernel_config": [
     {
       "name": "CVE-2021-22555",
-      "version": ["5.11.14"],
+      "version": {
+        "kernel_version": ["5.11.14"],
+        "git_commit": [],
+        "git_tag": []
+      },
       "options": [
         "CONFIG_IP_NF_*=y",
         "CONFIG_NETFILTER_*=y",
@@ -14,7 +18,7 @@
         "CONFIG_CHECKPOINT_RESTORE=y",
         "CONFIG_SECURITY=n"
       ],
-      "debug": true
+      "debug": false
     }
   ]
 }
