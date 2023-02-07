@@ -11,6 +11,7 @@ from lib.logger import log
 from lib.path import clear_file
 from lib.system import CMD
 from lib.utils import parse_compile_options
+from lib.number import Version
 
 
 class KernelCompiler(object):
@@ -122,34 +123,38 @@ class KernelCompiler(object):
             key = "git_tag"
 
         vlist = version_dict.get(key)
-        build_version = getattr(self.builder, key)
-        log.debug(f"compare: {build_version} in {vlist}")
+        bv = getattr(self.builder, key)
+        log.info(f"compare {bv} with {vlist}")
 
         # when `vlist` is empty, it means that the version is unlimited
         if not vlist:
             return True
 
         # parse arithmetic expressions
-        for v in vlist:
-            if v.startswith(">"):
-                if build_version > v[1:]:
-                    return True
-            elif v.startswith(">="):
-                if build_version >= v[2:]:
-                    return True
-            elif v.startswith("<"):
-                if build_version < v[1:]:
-                    return True
-            elif v.startswith("<="):
-                if build_version <= v[2:]:
-                    return True
-            elif "~" in v:
-                _a1, _a2 = v.split("~")
-                if _a1 <= build_version <= _a2:
-                    return True
-            else:
-                if build_version == v:
-                    return True
+        if key == "git_commit":
+            if bv in vlist:
+                return True
+        else:  # key == "kernel_version" or key == "git_tag"
+            for v in vlist:
+                if v.startswith(">") and v[1] != "=":
+                    if Version(bv) > Version(v):
+                        return True
+                elif v.startswith(">="):
+                    if Version(bv) >= Version(v):
+                        return True
+                elif v.startswith("<") and v[1] != "=":
+                    if Version(bv) < Version(v):
+                        return True
+                elif v.startswith("<="):
+                    if Version(bv) <= Version(v):
+                        return True
+                elif "~" in v:
+                    _v1, _v2 = v.split("~")
+                    if Version(_v1) <= Version(bv) <= Version(_v2):
+                        return True
+                else:
+                    if Version(bv) == Version(v):
+                        return True
 
         return False
 
