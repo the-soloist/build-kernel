@@ -4,6 +4,8 @@
 import shutil
 from pathlib import Path
 
+from lib.logger import log
+
 
 def init_dir(dir_path: Path):
     if not dir_path.is_dir():
@@ -26,9 +28,10 @@ def move_file(src: Path, dst: Path):
 
 
 def copy_file(src: Path, dst: Path, root: Path = None):
+    log.debug(f"copy {src} to {dst}")
+
     if src.is_file():
         shutil.copy(src, dst)
     else:
-        from lib.logger import log
         msg = str(src.relative_to(root)) if root else str(src)
         log.warning(f"{msg} not found.")

@@ -47,10 +47,12 @@ class KernelCompiler(object):
         self.builder = builder
 
     def compile_kernel(self):
+        log.info("init .config")
         self.init_dot_config()  # 初始化 .config
 
         if self.copy_dot_config:
             # 拷贝 .config 并返回
+            log.info(f"copy {self.dot_config_path} to ./dot_config")
             return copy_file(self.dot_config_path, Path("./dot_config"))
 
         if self.set_default_options:
@@ -73,6 +75,7 @@ class KernelCompiler(object):
         self.write_dot_config()
 
         # 编译
+        log.info("compile linux kernel")
         CMD(f"make --directory={self.builder.src_path} -j{self.thread_number} vmlinux bzImage", pause=True)
 
     """ option manager """

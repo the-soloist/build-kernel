@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 from lib.core.rootfs_builder import RootFsBuilder
+from lib.logger import log
 from lib.path import clear_file, copy_file
 from lib.system import CMD
 from lib.utils import parse_compile_options
@@ -34,10 +35,12 @@ class RootFsCompiler(object):
         self.builder = builder
 
     def compile_busybox(self):
+        log.info("init .config")
         self.init_dot_config()
 
         if self.copy_dot_config:
             # 拷贝 .config 并返回
+            log.info(f"copy {self.dot_config_path} to ./dot_config")
             return copy_file(self.dot_config_path, Path("./dot_config"))
 
         if self.set_default_options:
@@ -47,7 +50,10 @@ class RootFsCompiler(object):
         self.parse_compile_options()
         self.write_dot_config()
 
+        log.info("compile busybox")
         CMD(f"make --directory={self.builder.busybox_path} -j{self.thread_number}", pause=True)
+
+        log.info("install busybox")
         CMD(f"make --directory={self.builder.busybox_path} install", pause=True)
 
     """ option manager """
