@@ -17,6 +17,8 @@ class RootFsBuilder(object):
         self.busybox_name = None
         self.busybox_path = None
 
+        init_dir(KERNEL_ROOTFS)
+
     def import_args(self, args: ArgumentParser):
         self.busybox_version = args.busybox_version
         self.busybox_name = f"busybox-{self.busybox_version}"

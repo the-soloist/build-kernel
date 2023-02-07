@@ -5,8 +5,6 @@ import argparse
 import configparser
 from pathlib import Path
 
-from lib.path import init_dir
-
 
 def init_parser() -> argparse.ArgumentParser:
     # init parser
@@ -61,10 +59,6 @@ KERNEL_SOUECE = WORK_HOME / "kernel" / "source"
 
 BUILD_INI_CONF = WORK_HOME / "build.ini"
 BUILD_JSON_CONF = WORK_HOME / "build.json"
-
-init_dir(KERNEL_IMAGES)
-init_dir(KERNEL_ROOTFS)
-init_dir(KERNEL_SOUECE)
 
 
 # === init config parser ===

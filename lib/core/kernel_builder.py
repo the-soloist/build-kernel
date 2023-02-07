@@ -37,6 +37,9 @@ class KernelBuilder(object):
         self.kernel_name = None
         self.src_path: Path = None
 
+        init_dir(KERNEL_IMAGES)
+        init_dir(KERNEL_SOUECE)
+
     def import_args(self, args: ArgumentParser):
         self.kernel_version = args.kernel_version
         self.git_commit = args.git_commit

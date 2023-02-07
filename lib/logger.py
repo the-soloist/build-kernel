@@ -8,11 +8,12 @@ from loguru import logger as log
 from pathlib import Path
 
 from lib.config import CONFIG
-from lib.path import init_file
 
 
 log_path = Path(CONFIG.get("general", "log_path")) / "build.log"
-init_file(log_path)
+if not log_path.is_file():
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.touch()
 
 # 终端日志输出格式
 stdout_fmt = (
