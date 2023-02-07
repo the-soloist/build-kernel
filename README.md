@@ -30,6 +30,10 @@ options:
 python build.py -kv 5.17.11 -d
 # 使用代理下载 kernel 源码
 python build.py -P -kv 5.17.11 -d
+# 复制 kernel 的 .config 文件
+python build.py -kv 5.17.11 kc -m
+# 使用16个线程，自定义 config 文件，编译 kernel
+python build.py -kv 5.17.11 kc -t 16 -c "./dot_config"
 # 使用16个线程，内置编译选项，编译 kernel
 python build.py -kv 5.17.11 kc -t 16 -s
 # 使用16个线程，json 配置 test-config，编译 kernel

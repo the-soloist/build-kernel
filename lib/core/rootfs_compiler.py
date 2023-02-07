@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from argparse import ArgumentParser
+from pathlib import Path
 
 from lib.core.rootfs_builder import RootFsBuilder
-from lib.path import clear_file
+from lib.path import clear_file, copy_file
 from lib.system import CMD
 from lib.utils import parse_compile_options
 
@@ -24,13 +25,20 @@ class RootFsCompiler(object):
     def import_args(self, args: ArgumentParser):
         self.thread_number = args.thread_number
 
+        self.copy_dot_config = args.copy_dot_config
         self.set_default_options = args.set_default_options
+
+        self.custom_config_path = args.custom_config_path
 
     def set_builder(self, builder: RootFsBuilder):
         self.builder = builder
 
     def compile_busybox(self):
         self.init_dot_config()
+
+        if self.copy_dot_config:
+            # 拷贝 .config 并返回
+            return copy_file(self.dot_config_path, Path("./dot_config"))
 
         if self.set_default_options:
             self.set_default_compile_options()
@@ -68,7 +76,11 @@ class RootFsCompiler(object):
     def init_dot_config(self):
         self.dot_config_path = self.builder.busybox_path / ".config"
         clear_file(self.dot_config_path)
-        CMD(f"make --directory={self.builder.busybox_path} defconfig")
+
+        if self.custom_config_path:
+            copy_file(Path(self.custom_config_path), self.dot_config_path)
+        else:
+            CMD(f"make --directory={self.builder.busybox_path} defconfig")
 
     def read_dot_config(self):
         """ 读取 .config 内容 """

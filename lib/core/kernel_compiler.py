@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
 import json
 from argparse import ArgumentParser
+from pathlib import Path
 
 from lib.config import CONFIG, BUILD_JSON_CONF
 from lib.core import KernelBuilder
 from lib.logger import log
-from lib.path import clear_file
+from lib.number import Version
+from lib.path import clear_file, copy_file
 from lib.system import CMD
 from lib.utils import parse_compile_options
-from lib.number import Version
 
 
 class KernelCompiler(object):
@@ -35,6 +35,7 @@ class KernelCompiler(object):
     def import_args(self, args: ArgumentParser):
         self.thread_number = args.thread_number
 
+        self.copy_dot_config = args.copy_dot_config
         self.add_debug_symbol = args.add_debug_symbol
         self.set_default_options = args.set_default_options
 
@@ -47,6 +48,10 @@ class KernelCompiler(object):
 
     def compile_kernel(self):
         self.init_dot_config()  # 初始化 .config
+
+        if self.copy_dot_config:
+            # 拷贝 .config 并返回
+            return copy_file(self.dot_config_path, Path("./dot_config"))
 
         if self.set_default_options:
             self.set_default_compile_options()

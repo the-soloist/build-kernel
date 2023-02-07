@@ -29,6 +29,7 @@ def init_parser() -> argparse.ArgumentParser:
     # kernel compiler
     kc_parser = subparsers.add_parser("kc", help="kernel compiler config")
     kc_parser.add_argument("-t", "--thread-number", action="store", type=int, default=4, help="sets the number of compilation threads (default: 4)")
+    kc_parser.add_argument("-m", "--copy-dot-config", action="store_true", help="copy .config")
     kc_parser.add_argument("-d", "--add-debug-symbol", action="store_true", help="add debugging options")
     kc_parser.add_argument("-s", "--set-default-options", action="store_true", help="set built-in default options")
     kc_group = kc_parser.add_mutually_exclusive_group(required=False)
@@ -39,7 +40,10 @@ def init_parser() -> argparse.ArgumentParser:
     # rootfs compiler
     rc_parser = subparsers.add_parser("rc", help="rootfs compiler config")
     rc_parser.add_argument("-t", "--thread-number", action="store", type=int, default=4, help="sets the number of compilation threads (default: 4)")
+    rc_parser.add_argument("-m", "--copy-dot-config", action="store_true", help="copy .config")
     rc_parser.add_argument("-s", "--set-default-options", action="store_true", help="set built-in default options")
+    rc_group = rc_parser.add_mutually_exclusive_group(required=False)
+    rc_group.add_argument("-c", "--custom-config-path", action="store", help="use custom config path")
 
     return parser
 
