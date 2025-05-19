@@ -23,7 +23,8 @@ kill -9 $(pgrep gdb)
 # make
 tmux send-keys -t 1 "bash ./start.sh" Enter
 # pause
-tmux send-keys -t 2 "gdb -ex 'source ./script.gdb'" Enter
+tmux send-keys -t 2 "bash ./debug.sh" Enter
+# tmux send-keys -t 2 "gdb -ex 'source ./script.gdb'" Enter
 
 # echo "wail seconds"
 # sleep 6
