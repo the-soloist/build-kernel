@@ -1,3 +1,3 @@
 ALL:
-	gcc --static -masm=intel -O0 exp.c -o rootfs/exp
+	gcc -Os -static -masm=intel -s exp.c -o rootfs/exp
 	cd rootfs && find . | cpio -o --format=newc > ../rootfs.cpio
