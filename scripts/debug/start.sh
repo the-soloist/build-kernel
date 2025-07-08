@@ -10,4 +10,4 @@ qemu-system-x86_64 \
     -netdev user,id=t0, -device e1000,netdev=t0,id=nic0 \
     -monitor /dev/null \
     -nographic \
-    -s
+    -s -S
